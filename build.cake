@@ -149,7 +149,7 @@ Task("Deploy-Octopus")
 Task("Version")
     .Does<PackageMetadata>(package =>
 {
-    package.Version  = null;// ReadVersionFromProjectFile(Context);
+    package.Version  = ReadVersionFromProjectFile(Context);
     if (package.Version == null) {
         Information($"Version info missing in project file");
         package.Version = GitVersion().FullSemVer;
