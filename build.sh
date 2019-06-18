@@ -21,3 +21,4 @@ fi
 
 # Run the build script
 exec "$CAKE_TOOL" "$@"
+pause
