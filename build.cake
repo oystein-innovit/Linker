@@ -173,8 +173,8 @@ Task("Set-Build-Number")
 });
 
 Task("Publish-Build-Artifact")
-    .WithCriteria(() => BuildSystem.IsRunningOnTeamCity)
-    .IsDependentOn("Package-Zip")
+    .WithCriteria(BuildSystem.IsRunningOnTeamCity)
+    .IsDependentOn("Package-zip")
     .Does<PackageMetadata>( package =>
 {
     TeamCity.PublishArtifacts(package.FullPath);
@@ -206,11 +206,11 @@ Task("Publish-Test-Results")
 Task("Build-CI")
     .IsDependentOn("Compile")
     .IsDependentOn("Test")
-    .IsDependeeOf("Build-Frontend")
+    .IsDependentOn("Build-Frontend")
     .IsDependentOn("Version")
     .IsDependentOn("Package-Zip")
     .IsDependentOn("Set-Build-Number")
-    .IsDependentOn("Publish-Bild-Artifact")
+    .IsDependentOn("Publish-Build-Artifact")
     .IsDependentOn("Publish-Test-Results");
 
 RunTarget(target);
