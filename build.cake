@@ -157,4 +157,31 @@ Task("Version")
     Information($"Version {package.Version}");
 });
 
+Task("Set-Build-Number")
+    .WithCriteria(() => BuildSystem.IsRunningOnTeamCity)
+    .Does<PackageMetadata>( package =>
+{
+    var buildNumber = TeamCity.Environment.Build.Number;
+    TeamCity.SetBuildNumber($"{package.Version}+{buildNumber}");
+});
+
+Task("Publish-Build-Artifact")
+    .WithCriteria(() => BuildSystem.IsRunningOnTeamCity)
+    .IsDependentOn("Package-Zip")
+    .Does<PackageMetadata>( package =>
+{
+    TeamCity.PublishArtifacts(package.OutputDirectory.FullPath);
+});
+
+Task("Build-CI")
+    .IsDependentOn("Compile")
+    .IsDependentOn("Test")
+    .IsDependeeOf("Build-Frontend")
+    .IsDependentOn("Version")
+    .IsDependentOn("Package-Zip")
+    .IsDependentOn("Set-Build-Number")
+    .Does(() =>
+{
+    
+});
 RunTarget(target);
