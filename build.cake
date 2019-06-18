@@ -170,7 +170,11 @@ Task("Publish-Build-Artifact")
     .IsDependentOn("Package-Zip")
     .Does<PackageMetadata>( package =>
 {
-    TeamCity.PublishArtifacts(package.OutputDirectory.FullPath);
+    TeamCity.PublishArtifacts(package.FullPath);
+
+    foreach( var p in GetFiles(package.OutputDirectory + $"/*.{package.Extension}")) {
+        TeamCity.PublishArtifacts(p.FullPath);
+    }
 });
 
 Task("Build-CI")
