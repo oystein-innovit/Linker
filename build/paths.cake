@@ -5,4 +5,5 @@ public static class Paths
     public static FilePath FrontendDirectory => "src/Linker";
     public static FilePath TestProjectFile => "test/Linker.Tests/Linker.Tests.csproj";
     public static DirectoryPath PublishDirectory = "publish";
+    public static DirectoryPath TestResultDirectory = "testResults";
 }
